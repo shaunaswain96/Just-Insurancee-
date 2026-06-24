@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just Insurance — Personal Insurance Advisor | Houston, TX</title>
+  <meta name="description" content="Licensed independent insurance advisor in Houston, TX. One advisor managing your complete portfolio — home, auto, life, and business." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white:   #FFFFFF;
+      --cream:   #F5F2EE;
+      --light:   #EEECE8;
+      --text:    #1A1917;
+      --muted:   #6B6860;
+      --border:  #DDD9D3;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--white); color: var(--text); font-family: 'Lato', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+
+    /* FADE */
+    .fade { opacity: 0; transform: translateY(18px); transition: opacity .75s ease, transform .75s ease; }
+    .fade.in { opacity: 1; transform: none; }
+
+    /* NAV */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: 0 52px; height: 70px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 16px;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta a {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text); text-decoration: none;
+      border: 1.5px solid var(--text); padding: 10px 24px;
+      transition: background .25s, color .25s;
+    }
+    .nav-cta a:hover { background: var(--text); color: var(--white); }
+
+    /* HERO */
+    #hero {
+      margin-top: 70px; height: calc(100vh - 70px);
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1800&q=85') center/cover no-repeat;
+      animation: zoomIn 12s ease-out forwards;
+    }
+    @keyframes zoomIn { from { transform: scale(1.06); } to { transform: scale(1); } }
+    .hero-overlay { position: absolute; inset: 0; background: rgba(10,8,5,.42); }
+    .hero-text {
+      position: relative; z-index: 1; text-align: center; padding: 0 32px; max-width: 880px;
+    }
+    .hero-eyebrow {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 6px; text-transform: uppercase;
+      color: rgba(255,255,255,.55); display: block; margin-bottom: 22px;
+    }
+    .hero-h1 {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(42px, 7.5vw, 96px);
+      line-height: 1.0; color: var(--white);
+      text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 22px;
+    }
+    .hero-sub {
+      font-size: 16px; color: rgba(255,255,255,.6);
+      font-weight: 300; max-width: 520px; margin: 0 auto 40px; line-height: 1.8;
+    }
+    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-white {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; text-decoration: none;
+      background: var(--white); color: var(--text); padding: 15px 42px;
+      transition: background .25s, color .25s;
+    }
+    .btn-white:hover { background: var(--cream); }
+    .btn-outline-white {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,.55); color: rgba(255,255,255,.8); padding: 15px 42px;
+      transition: border-color .25s, color .25s;
+    }
+    .btn-outline-white:hover { border-color: white; color: white; }
+
+    /* TRUST BAR */
+    #trust { background: var(--cream); border-bottom: 1px solid var(--border); }
+    .trust-row {
+      max-width: 1160px; margin: 0 auto; padding: 0 52px;
+      display: flex; align-items: stretch;
+    }
+    .trust-item {
+      flex: 1; padding: 32px 24px; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .trust-item:last-child { border-right: none; }
+    .trust-label {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--text);
+      display: block; margin-bottom: 4px;
+    }
+    .trust-sub { font-size: 12px; color: var(--muted); }
+
+    /* MISSION */
+    #mission { padding: 100px 52px; background: var(--white); }
+    .mission-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0; align-items: center;
+    }
+    .mission-div { background: var(--border); align-self: stretch; }
+    .mission-left { padding-right: 80px; }
+    .mission-right { padding-left: 80px; }
+    .mission-h2 {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(28px, 3.5vw, 50px); text-transform: uppercase;
+      letter-spacing: 1px; line-height: 1.1; color: var(--text);
+    }
+    .mission-right p { font-size: 15px; color: var(--muted); line-height: 2.0; margin-bottom: 24px; }
+    .text-link {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; text-decoration: none; color: var(--text);
+      border-bottom: 2px solid var(--text); padding-bottom: 3px;
+      display: inline-block; transition: opacity .2s;
+    }
+    .text-link:hover { opacity: .5; }
+
+    /* PANELS */
+    .panel { display: grid; grid-template-columns: 1fr 1fr; }
+    .panel-img { min-height: 560px; background-size: cover; background-position: center; }
+    .panel-body {
+      padding: 88px 72px; display: flex; flex-direction: column;
+      justify-content: center; background: var(--white);
+    }
+    .panel-body.cream { background: var(--cream); }
+    .panel-eyebrow {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 4px; text-transform: uppercase; color: var(--muted);
+      margin-bottom: 14px; display: block;
+    }
+    .panel-h2 {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(24px, 3vw, 40px); text-transform: uppercase;
+      letter-spacing: 1px; line-height: 1.15; color: var(--text); margin-bottom: 18px;
+    }
+    .panel-p { font-size: 14px; color: var(--muted); line-height: 1.9; margin-bottom: 28px; max-width: 420px; }
+    .check-list { list-style: none; margin-bottom: 32px; }
+    .check-list li {
+      font-size: 13px; color: var(--text); padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .check-list li::before { content: '—'; color: var(--muted); font-weight: 300; flex-shrink: 0; }
+
+    /* SERVICES */
+    #services { padding: 100px 52px; background: var(--white); }
+    .services-wrap { max-width: 1160px; margin: 0 auto; }
+    .services-head { text-align: center; margin-bottom: 72px; }
+    .section-eyebrow {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 5px; text-transform: uppercase; color: var(--muted);
+      display: block; margin-bottom: 16px;
+    }
+    .section-h2 {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(26px, 4vw, 48px); text-transform: uppercase;
+      letter-spacing: 1px; line-height: 1.1; color: var(--text); margin-bottom: 16px;
+    }
+    .section-p { font-size: 15px; color: var(--muted); line-height: 1.9; }
+    .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 2px solid var(--text); border-left: 2px solid var(--text); }
+    .svc-card {
+      padding: 44px 36px; border-right: 2px solid var(--text); border-bottom: 2px solid var(--text);
+      transition: background .3s;
+    }
+    .svc-card:hover { background: var(--cream); }
+    .svc-num {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 800;
+      letter-spacing: 3px; color: var(--border); display: block; margin-bottom: 18px;
+    }
+    .svc-name {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 18px;
+      text-transform: uppercase; letter-spacing: 1px; color: var(--text);
+      margin-bottom: 12px; line-height: 1.2;
+    }
+    .svc-desc { font-size: 13px; color: var(--muted); line-height: 1.85; margin-bottom: 14px; }
+    .svc-type {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 600;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--border);
+    }
+
+    /* PHOTO PAIR */
+    .photo-pair { display: grid; grid-template-columns: 3fr 2fr; }
+    .photo-pair-item { height: 480px; background-size: cover; background-position: center; }
+
+    /* QUOTE */
+    #quote { background: var(--text); padding: 120px 52px; text-align: center; }
+    .quote-inner { max-width: 840px; margin: 0 auto; }
+    #quote blockquote {
+      font-family: 'Raleway', sans-serif; font-weight: 600;
+      font-size: clamp(22px, 3.5vw, 38px); text-transform: uppercase;
+      letter-spacing: 1px; line-height: 1.4; color: var(--white); margin-bottom: 24px;
+    }
+    #quote cite {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(255,255,255,.4); font-style: normal;
+      font-family: 'Raleway', sans-serif; font-weight: 600;
+    }
+
+    /* PARTNERS */
+    #partners { padding: 100px 52px; background: var(--cream); }
+    .partners-wrap { max-width: 1160px; margin: 0 auto; }
+    .partners-head { text-align: center; margin-bottom: 72px; }
+    .partners-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+    .partner-card { background: var(--white); padding: 48px 32px; transition: background .3s; }
+    .partner-card:hover { background: var(--light); }
+    .partner-bar { width: 32px; height: 3px; background: var(--text); margin-bottom: 24px; transition: width .4s; }
+    .partner-card:hover .partner-bar { width: 56px; }
+    .partner-name {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 16px;
+      text-transform: uppercase; letter-spacing: 1px; color: var(--text); margin-bottom: 12px;
+    }
+    .partner-desc { font-size: 13px; color: var(--muted); line-height: 1.85; }
+
+    /* STATS */
+    #stats { background: var(--white); border-top: 2px solid var(--text); border-bottom: 2px solid var(--text); }
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 1160px; margin: 0 auto; }
+    .stat-item { padding: 60px 24px; text-align: center; border-right: 1px solid var(--border); }
+    .stat-item:last-child { border-right: none; }
+    .stat-n {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(52px, 6vw, 80px); color: var(--text);
+      line-height: 1; margin-bottom: 8px; letter-spacing: -2px;
+    }
+    .stat-l {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 4px; text-transform: uppercase; color: var(--muted);
+    }
+
+    /* CTA */
+    #cta { position: relative; padding: 160px 52px; text-align: center; overflow: hidden; }
+    .cta-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1800&q=85') center/cover no-repeat;
+    }
+    .cta-overlay { position: absolute; inset: 0; background: rgba(8,6,3,.75); }
+    .cta-content { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+    .cta-eyebrow {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 6px; text-transform: uppercase; color: rgba(255,255,255,.4);
+      display: block; margin-bottom: 20px;
+    }
+    .cta-h2 {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(32px, 5.5vw, 68px); text-transform: uppercase;
+      letter-spacing: 2px; color: var(--white); line-height: 1.05; margin-bottom: 20px;
+    }
+    .cta-sub { font-size: 15px; color: rgba(255,255,255,.45); margin-bottom: 16px; font-weight: 300; line-height: 1.8; }
+    .cta-phone {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(28px, 4.5vw, 54px); color: var(--white);
+      letter-spacing: 2px; text-decoration: none; display: block;
+      margin-bottom: 44px; transition: opacity .3s;
+    }
+    .cta-phone:hover { opacity: .6; }
+    .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* FOOTER */
+    footer { background: var(--text); padding: 52px 52px; }
+    .footer-inner {
+      max-width: 1160px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; gap: 32px;
+    }
+    .f-brand {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 13px;
+      letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,.5);
+    }
+    .f-center { text-align: center; }
+    .f-center p {
+      font-size: 11px; color: rgba(255,255,255,.3); line-height: 1.9;
+      font-family: 'Raleway', sans-serif; letter-spacing: 1px;
+    }
+    .f-right { text-align: right; }
+    .f-right a {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,.4); text-decoration: none; transition: color .2s;
+    }
+    .f-right a:hover { color: rgba(255,255,255,.7); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .panel { grid-template-columns: 1fr; }
+      .panel-img { min-height: 380px; }
+      .mission-inner { grid-template-columns: 1fr; }
+      .mission-div { display: none; }
+      .mission-left { padding-right: 0; margin-bottom: 48px; }
+      .mission-right { padding-left: 0; }
+      .partners-grid { grid-template-columns: 1fr 1fr; gap: 2px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(1), .stat-item:nth-child(2) { border-bottom: 1px solid var(--border); }
+      .svc-grid { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .photo-pair { grid-template-columns: 1fr; }
+      .photo-pair-item { height: 320px; }
+    }
+    @media (max-width: 680px) {
+      #nav { padding: 0 20px; }
+      #mission, #services, #partners, #quote, #cta, footer { padding-left: 20px; padding-right: 20px; }
+      .trust-row { flex-direction: column; padding: 0 20px; }
+      .trust-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .trust-item:last-child { border-bottom: none; }
+      .svc-grid { grid-template-columns: 1fr; }
+      .partners-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .footer-inner { grid-template-columns: 1fr; text-align: center; }
+      .f-right { text-align: center; }
+      .panel-body { padding: 60px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-brand">Just Insurance</a>
+  <ul class="nav-links">
+    <li><a href="#mission">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#partners">Partners</a></li>
+    <li><a href="#cta">Contact</a></li>
+  </ul>
+  <div class="nav-cta"><a href="tel:5026127011">Call Now</a></div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-text">
+    <span class="hero-eyebrow">Personal Insurance Advisor — Houston, TX</span>
+    <h1 class="hero-h1">Your Life,<br>Fully Protected.</h1>
+    <p class="hero-sub">One advisor managing your complete insurance portfolio — home, auto, life, and business.</p>
+    <div class="hero-actions">
+      <a href="#mission" class="btn-white">Learn More</a>
+      <a href="tel:5026127011" class="btn-outline-white">(502) 612-7011</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div id="trust">
+  <div class="trust-row fade">
+    <div class="trust-item"><span class="trust-label">Licensed in Texas</span><span class="trust-sub">Independent Advisor</span></div>
+    <div class="trust-item"><span class="trust-label">Houston Based</span><span class="trust-sub">Serving Greater Houston</span></div>
+    <div class="trust-item"><span class="trust-label">20+ Carriers</span><span class="trust-sub">No Captive Bias</span></div>
+    <div class="trust-item"><span class="trust-label">One Advisor</span><span class="trust-sub">All Your Policies</span></div>
+    <div class="trust-item"><span class="trust-label">Same Day</span><span class="trust-sub">Quotes &amp; Responses</span></div>
+  </div>
+</div>
+
+<!-- MISSION -->
+<section id="mission">
+  <div class="mission-inner">
+    <div class="mission-left fade">
+      <h2 class="mission-h2">Meticulous Coverage,<br>Without Compromise.</h2>
+    </div>
+    <div class="mission-div"></div>
+    <div class="mission-right fade">
+      <p>We believe your insurance portfolio should be as carefully curated as everything else in your life. Most people have four policies with four different agents and no one talking to each other. I fix that.</p>
+      <p>One advisor. One call. Your complete portfolio — handled the way it should be.</p>
+      <a href="#services" class="text-link">View Services</a>
+    </div>
+  </div>
+</section>
+
+<!-- PANEL 1 -->
+<div class="panel">
+  <div class="panel-img" style="background-image:url('https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=900&q=85');"></div>
+  <div class="panel-body cream">
+    <span class="panel-eyebrow fade">Why It's Different</span>
+    <h2 class="panel-h2 fade">One Advisor.<br>Everything Covered.</h2>
+    <p class="panel-p fade">I'm not captive to one carrier. I shop the market and bring you the best coverage at the best rate — for every policy you own.</p>
+    <ul class="check-list fade">
+      <li>One contact for every policy</li>
+      <li>Multiple carriers, no bias</li>
+      <li>Annual reviews — always optimized</li>
+      <li>Personal claims guidance</li>
+      <li>Licensed &amp; independent</li>
+    </ul>
+    <a href="#cta" class="text-link fade">Get a Free Quote</a>
+  </div>
+</div>
+
+<!-- PANEL 2 -->
+<div class="panel">
+  <div class="panel-body">
+    <span class="panel-eyebrow fade">Real Estate Professionals</span>
+    <h2 class="panel-h2 fade">Your Partner at<br>Every Closing.</h2>
+    <p class="panel-p fade">Fast, reliable, and never the reason a deal slips. I work with lenders, title companies, builders, and agents across Houston to make insurance seamless for every transaction.</p>
+    <a href="#partners" class="text-link fade">Partner With Me</a>
+  </div>
+  <div class="panel-img" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=900&q=85');"></div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-wrap">
+    <div class="services-head">
+      <span class="section-eyebrow fade">What I Cover</span>
+      <h2 class="section-h2 fade">Your Complete Insurance Portfolio</h2>
+      <p class="section-p fade">Every policy type, managed by one person who actually knows you.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card fade"><span class="svc-num">01</span><div class="svc-name">Home &amp; Auto</div><p class="svc-desc">Bundle and actually get covered. I find the gaps before claims do.</p><span class="svc-type">Personal Lines</span></div>
+      <div class="svc-card fade"><span class="svc-num">02</span><div class="svc-name">Contractors &amp; Builders</div><p class="svc-desc">GL, Workers Comp, Commercial Auto, Builders Risk — I know what your GC requires.</p><span class="svc-type">Commercial Lines</span></div>
+      <div class="svc-card fade"><span class="svc-num">03</span><div class="svc-name">Life &amp; Umbrella</div><p class="svc-desc">The policies most people overlook until they wish they hadn't.</p><span class="svc-type">Personal Lines</span></div>
+      <div class="svc-card fade"><span class="svc-num">04</span><div class="svc-name">Business Insurance</div><p class="svc-desc">BOP, Professional Liability, Workers Comp — complete commercial coverage.</p><span class="svc-type">Commercial Lines</span></div>
+      <div class="svc-card fade"><span class="svc-num">05</span><div class="svc-name">Flood &amp; Specialty</div><p class="svc-desc">Houston knows flood. I make sure your coverage is right before the season.</p><span class="svc-type">Specialty Lines</span></div>
+      <div class="svc-card fade"><span class="svc-num">06</span><div class="svc-name">Annual Review</div><p class="svc-desc">Eliminate overlaps, find savings, close gaps — every single year.</p><span class="svc-type">Advisory</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO PAIR -->
+<div class="photo-pair">
+  <div class="photo-pair-item" style="background-image:url('https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=85');"></div>
+  <div class="photo-pair-item" style="background-image:url('https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=800&q=85');"></div>
+</div>
+
+<!-- QUOTE -->
+<section id="quote">
+  <div class="quote-inner">
+    <blockquote class="fade">"Insurance isn't a transaction. It's the thing that protects everything you've worked to build."</blockquote>
+    <cite class="fade">— Shauna Swain &nbsp;·&nbsp; Just Insurance, Houston TX</cite>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section id="partners">
+  <div class="partners-wrap">
+    <div class="partners-head">
+      <span class="section-eyebrow fade">Partner Services</span>
+      <h2 class="section-h2 fade">Built for the Real Estate World.</h2>
+      <p class="section-p fade">I work seamlessly with every professional involved in buying, building, and closing Houston homes.</p>
+    </div>
+    <div class="partners-grid">
+      <div class="partner-card fade"><div class="partner-bar"></div><div class="partner-name">Mortgage Lenders</div><p class="partner-desc">Your borrowers need homeowners insurance to close. I quote fast and never hold up the table.</p></div>
+      <div class="partner-card fade"><div class="partner-bar"></div><div class="partner-name">Title Companies</div><p class="partner-desc">Integrate me into your closing process. I handle insurance so your timeline stays intact.</p></div>
+      <div class="partner-card fade"><div class="partner-bar"></div><div class="partner-name">Custom Builders</div><p class="partner-desc">Builders Risk, GL, and Workers Comp from groundbreak to CO. One advisor, full cycle.</p></div>
+      <div class="partner-card fade"><div class="partner-bar"></div><div class="partner-name">Real Estate Agents</div><p class="partner-desc">Refer your buyers with confidence. I treat your clients exactly like my own.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="stats-row">
+    <div class="stat-item fade"><div class="stat-n"><span class="cnt" data-t="20">0</span>+</div><div class="stat-l">Carrier Partners</div></div>
+    <div class="stat-item fade"><div class="stat-n"><span class="cnt" data-t="15">0</span></div><div class="stat-l">Texas Markets</div></div>
+    <div class="stat-item fade"><div class="stat-n"><span class="cnt" data-t="100">0</span>%</div><div class="stat-l">Independent</div></div>
+    <div class="stat-item fade"><div class="stat-n">1</div><div class="stat-l">Advisor. All Policies.</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-content">
+    <span class="cta-eyebrow fade">Let's Talk</span>
+    <h2 class="cta-h2 fade">Ready for insurance that actually works?</h2>
+    <p class="cta-sub fade">Free consultation. No pressure. Just a real conversation about your coverage.</p>
+    <a href="tel:5026127011" class="cta-phone fade">(502) 612-7011</a>
+    <div class="cta-btns fade">
+      <a href="tel:5026127011" class="btn-white">Call or Text Now</a>
+      <a href="mailto:shauna.swain96@gmail.com" class="btn-outline-white">Send an Email</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="f-brand">Just Insurance</div>
+    <div class="f-center"><p>Licensed Independent Insurance Advisor<br>Houston, TX &nbsp;·&nbsp; © 2026 Just Insurance</p></div>
+    <div class="f-right"><a href="tel:5026127011">(502) 612-7011</a></div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(e => {
+  e.forEach(el => { if (el.isIntersecting) { el.target.classList.add('in'); io.unobserve(el.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade').forEach(el => io.observe(el));
+
+const co = new IntersectionObserver(e => {
+  e.forEach(el => {
+    if (!el.isIntersecting) return;
+    const s = el.target.querySelector('.cnt');
+    if (!s) return;
+    const t = +s.dataset.t; let v = 0;
+    const ti = setInterval(() => { v = Math.min(v + t / 50, t); s.textContent = Math.round(v); if (v >= t) clearInterval(ti); }, 28);
+    co.unobserve(el.target);
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-item').forEach(el => co.observe(el));
+</script>
+</body>
+</html>
