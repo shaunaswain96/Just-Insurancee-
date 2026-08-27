@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICP — Insurance Coverage Packages for Builders, Developers &amp; Investors | Just Insurance</title>
+  <meta name="description" content="ICP: Insurance Coverage Packages for builders, developers, and investors. One flat, pre-built bundle for every insurance need — like an HOA, but for your business." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white:   #FFFFFF;
+      --cream:   #F5F2EE;
+      --light:   #EEECE8;
+      --text:    #1A1917;
+      --muted:   #6B6860;
+      --border:  #DDD9D3;
+      --accent:  #8A6D3B;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--white); color: var(--text); font-family: 'Lato', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+
+    .fade { opacity: 0; transform: translateY(18px); transition: opacity .75s ease, transform .75s ease; }
+    .fade.in { opacity: 1; transform: none; }
+
+    /* NAV */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: 0 52px; height: 70px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 16px;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .nav-cta a {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text); text-decoration: none;
+      border: 1.5px solid var(--text); padding: 10px 24px;
+      transition: background .25s, color .25s;
+    }
+    .nav-cta a:hover { background: var(--text); color: var(--white); }
+
+    /* HERO */
+    #hero {
+      margin-top: 70px; min-height: 78vh;
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      padding: 90px 32px 70px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1800&q=85') center/cover no-repeat;
+      animation: zoomIn 12s ease-out forwards;
+    }
+    @keyframes zoomIn { from { transform: scale(1.06); } to { transform: scale(1); } }
+    .hero-overlay { position: absolute; inset: 0; background: rgba(10,8,5,.58); }
+    .hero-text { position: relative; z-index: 1; text-align: center; max-width: 900px; }
+    .hero-eyebrow {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 6px; text-transform: uppercase;
+      color: rgba(255,255,255,.55); display: block; margin-bottom: 22px;
+    }
+    .hero-h1 {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(38px, 6.5vw, 84px);
+      line-height: 1.05; color: var(--white);
+      text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 22px;
+    }
+    .hero-sub {
+      font-size: 16px; color: rgba(255,255,255,.65);
+      font-weight: 300; max-width: 620px; margin: 0 auto 40px; line-height: 1.9;
+    }
+    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-white {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; text-decoration: none;
+      background: var(--white); color: var(--text); padding: 15px 42px;
+      transition: background .25s, color .25s;
+    }
+    .btn-white:hover { background: var(--cream); }
+    .btn-outline-white {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,.55); color: rgba(255,255,255,.85); padding: 15px 42px;
+      transition: border-color .25s, color .25s;
+    }
+    .btn-outline-white:hover { border-color: white; color: white; }
+
+    /* EXPLAINER */
+    #explainer { padding: 100px 52px; background: var(--white); }
+    .explainer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0; align-items: center;
+    }
+    .explainer-div { background: var(--border); align-self: stretch; }
+    .explainer-left { padding-right: 80px; }
+    .explainer-right { padding-left: 80px; }
+    .explainer-h2 {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(26px, 3.3vw, 46px); text-transform: uppercase;
+      letter-spacing: 1px; line-height: 1.15; color: var(--text);
+    }
+    .explainer-right p { font-size: 15px; color: var(--muted); line-height: 2.0; margin-bottom: 22px; }
+    .explainer-right strong { color: var(--text); font-weight: 600; }
+
+    /* HOW IT WORKS */
+    #process { padding: 90px 52px 100px; background: var(--cream); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .process-wrap { max-width: 1160px; margin: 0 auto; }
+    .process-head { text-align: center; margin-bottom: 64px; }
+    .section-eyebrow {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 5px; text-transform: uppercase; color: var(--muted);
+      display: block; margin-bottom: 16px;
+    }
+    .section-h2 {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(24px, 3.6vw, 44px); text-transform: uppercase;
+      letter-spacing: 1px; line-height: 1.1; color: var(--text); margin-bottom: 16px;
+    }
+    .section-p { font-size: 15px; color: var(--muted); line-height: 1.9; max-width: 640px; margin: 0 auto; }
+    .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: var(--border); }
+    .process-step { background: var(--white); padding: 40px 30px; }
+    .process-num {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 34px;
+      color: var(--border); margin-bottom: 16px; letter-spacing: -1px;
+    }
+    .process-name {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 15px;
+      text-transform: uppercase; letter-spacing: 1px; color: var(--text); margin-bottom: 10px;
+    }
+    .process-desc { font-size: 13px; color: var(--muted); line-height: 1.8; }
+
+    /* PACKAGES */
+    #packages { padding: 100px 52px; background: var(--white); }
+    .packages-wrap { max-width: 1160px; margin: 0 auto; }
+    .packages-head { text-align: center; margin-bottom: 68px; }
+
+    .pkg-card {
+      border: 2px solid var(--text); margin-bottom: 40px;
+    }
+    .pkg-head {
+      padding: 40px 44px; background: var(--text);
+      display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .pkg-tag {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,.45);
+      display: block; margin-bottom: 10px;
+    }
+    .pkg-name {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: clamp(22px, 2.6vw, 32px);
+      text-transform: uppercase; letter-spacing: 1px; color: var(--white);
+    }
+    .pkg-for {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 1.5px; color: rgba(255,255,255,.6); max-width: 260px; text-align: right;
+    }
+    .pkg-body { display: grid; grid-template-columns: 1.3fr 1fr; }
+    .pkg-core { padding: 44px; border-right: 1px solid var(--border); }
+    .pkg-extra { padding: 44px; background: var(--cream); }
+    .pkg-label {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; display: block;
+    }
+    .cov-list { list-style: none; }
+    .cov-list li {
+      padding: 13px 0; border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: baseline;
+    }
+    .cov-list li:last-child { border-bottom: none; }
+    .cov-name {
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 12px;
+      letter-spacing: .5px; color: var(--text); text-transform: uppercase; line-height: 1.5;
+    }
+    .cov-desc { font-size: 13px; color: var(--muted); line-height: 1.75; }
+    .addon-list { list-style: none; margin-bottom: 26px; }
+    .addon-list li {
+      font-size: 13px; color: var(--text); padding: 9px 0 9px 20px;
+      border-bottom: 1px solid var(--border); position: relative; line-height: 1.7;
+    }
+    .addon-list li:last-child { border-bottom: none; }
+    .addon-list li::before { content: '+'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .pkg-note { font-size: 12.5px; color: var(--muted); line-height: 1.8; font-style: italic; }
+
+    /* QUOTE */
+    #quote { background: var(--text); padding: 110px 52px; text-align: center; }
+    .quote-inner { max-width: 840px; margin: 0 auto; }
+    #quote blockquote {
+      font-family: 'Raleway', sans-serif; font-weight: 600;
+      font-size: clamp(20px, 3.2vw, 34px); text-transform: uppercase;
+      letter-spacing: 1px; line-height: 1.4; color: var(--white); margin-bottom: 24px;
+    }
+    #quote cite {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(255,255,255,.4); font-style: normal;
+      font-family: 'Raleway', sans-serif; font-weight: 600;
+    }
+
+    /* CTA */
+    #cta { position: relative; padding: 150px 52px; text-align: center; overflow: hidden; }
+    .cta-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1800&q=85') center/cover no-repeat;
+    }
+    .cta-overlay { position: absolute; inset: 0; background: rgba(8,6,3,.78); }
+    .cta-content { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
+    .cta-eyebrow {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 6px; text-transform: uppercase; color: rgba(255,255,255,.4);
+      display: block; margin-bottom: 20px;
+    }
+    .cta-h2 {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(28px, 5vw, 58px); text-transform: uppercase;
+      letter-spacing: 2px; color: var(--white); line-height: 1.1; margin-bottom: 20px;
+    }
+    .cta-sub { font-size: 15px; color: rgba(255,255,255,.5); margin-bottom: 16px; font-weight: 300; line-height: 1.8; }
+    .cta-phone {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: clamp(26px, 4vw, 48px); color: var(--white);
+      letter-spacing: 2px; text-decoration: none; display: block;
+      margin-bottom: 44px; transition: opacity .3s;
+    }
+    .cta-phone:hover { opacity: .6; }
+    .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* FOOTER */
+    footer { background: var(--text); padding: 52px 52px; }
+    .footer-inner {
+      max-width: 1160px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; gap: 32px;
+    }
+    .f-brand {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 13px;
+      letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,.5);
+    }
+    .f-center { text-align: center; }
+    .f-center p {
+      font-size: 11px; color: rgba(255,255,255,.3); line-height: 1.9;
+      font-family: 'Raleway', sans-serif; letter-spacing: 1px;
+    }
+    .f-right { text-align: right; }
+    .f-right a {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,.4); text-decoration: none; transition: color .2s;
+    }
+    .f-right a:hover { color: rgba(255,255,255,.7); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .explainer-inner { grid-template-columns: 1fr; }
+      .explainer-div { display: none; }
+      .explainer-left { padding-right: 0; margin-bottom: 48px; }
+      .explainer-right { padding-left: 0; }
+      .process-grid { grid-template-columns: 1fr 1fr; }
+      .pkg-body { grid-template-columns: 1fr; }
+      .pkg-core { border-right: none; border-bottom: 1px solid var(--border); }
+      .pkg-for { text-align: left; max-width: none; }
+      .cov-list li { grid-template-columns: 1fr; gap: 4px; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 680px) {
+      #nav { padding: 0 20px; }
+      #explainer, #process, #packages, #quote, #cta, footer { padding-left: 20px; padding-right: 20px; }
+      .process-grid { grid-template-columns: 1fr; }
+      .pkg-head, .pkg-core, .pkg-extra { padding: 28px 24px; }
+      .footer-inner { grid-template-columns: 1fr; text-align: center; }
+      .f-right { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-brand">Just Insurance</a>
+  <ul class="nav-links">
+    <li><a href="index.html#mission">About</a></li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="icp.html" class="active">ICP Packages</a></li>
+    <li><a href="index.html#partners">Partners</a></li>
+    <li><a href="#cta">Contact</a></li>
+  </ul>
+  <div class="nav-cta"><a href="tel:5026127011">Call Now</a></div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-text">
+    <span class="hero-eyebrow">Introducing ICP — Insurance Coverage Packages</span>
+    <h1 class="hero-h1">Insurance,<br>Bundled Like an HOA.</h1>
+    <p class="hero-sub">One flat, pre-built package covering everything a builder, developer, or investor will ever need — instead of chasing down five agents for five policies. I'm your one point of contact for all of it.</p>
+    <div class="hero-actions">
+      <a href="#packages" class="btn-white">See the Packages</a>
+      <a href="tel:5026127011" class="btn-outline-white">(502) 612-7011</a>
+    </div>
+  </div>
+</section>
+
+<!-- EXPLAINER -->
+<section id="explainer">
+  <div class="explainer-inner">
+    <div class="explainer-left fade">
+      <h2 class="explainer-h2">What Is<br>An ICP?</h2>
+    </div>
+    <div class="explainer-div"></div>
+    <div class="explainer-right fade">
+      <p>An HOA takes a dozen scattered responsibilities — landscaping, security, maintenance, reserves — and bundles them into one flat package so homeowners never have to think about who handles what. An <strong>ICP (Insurance Coverage Package)</strong> does the same thing for insurance.</p>
+      <p>Instead of a General Liability policy from one agent, Builders Risk from another, and a personal umbrella you never got around to, you get <strong>one pre-built package matched to exactly what you do</strong> — builder, developer, or investor — with every coverage a person in your position actually needs, none of the ones you don't, and one advisor accountable for the whole thing.</p>
+      <p>You stop shopping for insurance. You just tell me which ICP fits your business, and I build, bind, and manage it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="process">
+  <div class="process-wrap">
+    <div class="process-head">
+      <span class="section-eyebrow fade">How It Works</span>
+      <h2 class="section-h2 fade">One Relationship. Zero Guesswork.</h2>
+      <p class="section-p fade">The whole point of an ICP is that you never have to piece this together yourself.</p>
+    </div>
+    <div class="process-grid">
+      <div class="process-step fade">
+        <div class="process-num">01</div>
+        <div class="process-name">Intake</div>
+        <div class="process-desc">A short conversation about what you're building, developing, or holding — project size, crew, entity structure, and portfolio.</div>
+      </div>
+      <div class="process-step fade">
+        <div class="process-num">02</div>
+        <div class="process-name">Package Match</div>
+        <div class="process-desc">I match you to the Builder, Developer, or Investor ICP — or blend them if you wear more than one hat — and flag which add-ons actually apply to you.</div>
+      </div>
+      <div class="process-step fade">
+        <div class="process-num">03</div>
+        <div class="process-name">Market &amp; Bind</div>
+        <div class="process-desc">I shop all coverages across 20+ carriers, align renewal dates into one calendar, and get every policy bound under one file.</div>
+      </div>
+      <div class="process-step fade">
+        <div class="process-num">04</div>
+        <div class="process-name">Annual Review</div>
+        <div class="process-desc">Every year, I re-check limits against your growth, close new gaps, track subcontractor COIs, and re-market anything that got expensive.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section id="packages">
+  <div class="packages-wrap">
+    <div class="packages-head">
+      <span class="section-eyebrow fade">The Packages</span>
+      <h2 class="section-h2 fade">Four ICPs. Built For How You Actually Work.</h2>
+      <p class="section-p fade">Every line item below is a real coverage, chosen for what actually causes claims in this line of work — not a generic checklist.</p>
+    </div>
+
+    <!-- BUILDER -->
+    <div class="pkg-card fade">
+      <div class="pkg-head">
+        <div><span class="pkg-tag">ICP · 01</span><h3 class="pkg-name">The Builder ICP</h3></div>
+        <div class="pkg-for">For active general contractors, remodelers &amp; trade contractors</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-core">
+          <span class="pkg-label">Core Coverages</span>
+          <ul class="cov-list">
+            <li><span class="cov-name">General Liability</span><span class="cov-desc">Project and completed-operations coverage that meets what every GC contract and permit requires.</span></li>
+            <li><span class="cov-name">Workers' Comp</span><span class="cov-desc">Statutory coverage for crew injuries on the job site — the #1 thing that shuts down a job if it's missing.</span></li>
+            <li><span class="cov-name">Commercial Auto</span><span class="cov-desc">Trucks, trailers, and hauled equipment moving between sites and suppliers.</span></li>
+            <li><span class="cov-name">Builders Risk</span><span class="cov-desc">The structure itself while under construction — fire, theft, wind, and vandalism before it's insurable as a finished property.</span></li>
+            <li><span class="cov-name">Tools &amp; Equipment</span><span class="cov-desc">Inland marine floater for tools and equipment on-site, in transit, or in storage — not covered by GL or auto.</span></li>
+            <li><span class="cov-name">Umbrella</span><span class="cov-desc">Extra limit above GL, auto, and workers' comp for the one bad claim that exceeds your primary limits.</span></li>
+          </ul>
+        </div>
+        <div class="pkg-extra">
+          <span class="pkg-label">Add When It Applies</span>
+          <ul class="addon-list">
+            <li>Contractor's Pollution Liability — mold, asbestos, fuel/chemical exposure from site work</li>
+            <li>License &amp; Permit Surety Bonds — required to bid or pull permits in most municipalities</li>
+            <li>Subcontractor COI Tracking — I verify every sub carries their own coverage and names you as additional insured, so their gap never becomes your claim</li>
+            <li>Cyber Liability — protects bid data, client info, and payment/ACH details</li>
+            <li>Employment Practices Liability — once you're hiring beyond a small core crew</li>
+          </ul>
+          <p class="pkg-note">Built around what actually causes claims on a job site: a worker injury, a sub with no coverage, a fire before the structure is finished, or a truck accident between sites.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEVELOPER -->
+    <div class="pkg-card fade">
+      <div class="pkg-head">
+        <div><span class="pkg-tag">ICP · 02</span><h3 class="pkg-name">The Developer ICP</h3></div>
+        <div class="pkg-for">For land acquisition, entitlement, and multi-unit or spec builds</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-core">
+          <span class="pkg-label">Core Coverages</span>
+          <ul class="cov-list">
+            <li><span class="cov-name">Builders Risk (COC)</span><span class="cov-desc">Course-of-construction form built to cover multiple concurrent projects and phases, not just one address.</span></li>
+            <li><span class="cov-name">Owner's Protective Liability</span><span class="cov-desc">Covers you as the developer for claims arising from your contractors' work — or a full OCIP wrap-up on larger projects.</span></li>
+            <li><span class="cov-name">Umbrella / Excess</span><span class="cov-desc">Higher limits sized to project value — developer exposure runs well past standard GC limits.</span></li>
+            <li><span class="cov-name">Environmental Liability</span><span class="cov-desc">Site contamination and remediation costs — the single most common six-figure surprise in ground-up development.</span></li>
+            <li><span class="cov-name">Delay in Completion</span><span class="cov-desc">Soft-cost coverage for lost financing costs, interest, and taxes if a covered loss pushes back your completion date.</span></li>
+            <li><span class="cov-name">Flood</span><span class="cov-desc">Site and structure flood coverage — non-negotiable for ground-up work in Houston's flood zones.</span></li>
+          </ul>
+        </div>
+        <div class="pkg-extra">
+          <span class="pkg-label">Add When It Applies</span>
+          <ul class="addon-list">
+            <li>Subcontractor Default Insurance — protects the project if a major sub fails to perform or goes under mid-build</li>
+            <li>Directors &amp; Officers — for the development LLC and its members/partners</li>
+            <li>Cyber Liability with wire-fraud coverage — protects earnest money and closing funds from the exact scam real estate deals attract</li>
+            <li>Errors &amp; Omissions — if you also advise, broker, or sell as part of the development</li>
+            <li>Key Person / Buy-Sell Life Insurance — funds a partner buyout if a principal dies mid-project</li>
+          </ul>
+          <p class="pkg-note">Built for the exposures that scale with project size: contamination, a failed sub, a delayed close, and wire fraud — not the smaller claims a single-job builder worries about.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVESTOR -->
+    <div class="pkg-card fade">
+      <div class="pkg-head">
+        <div><span class="pkg-tag">ICP · 03</span><h3 class="pkg-name">The Investor ICP</h3></div>
+        <div class="pkg-for">For rental portfolios, flips, and short-term rentals</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-core">
+          <span class="pkg-label">Core Coverages</span>
+          <ul class="cov-list">
+            <li><span class="cov-name">Landlord Property</span><span class="cov-desc">Per-property or blanket/portfolio policy covering every unit under one schedule instead of a dozen separate policies.</span></li>
+            <li><span class="cov-name">Loss of Rents</span><span class="cov-desc">Replaces rental income while a covered loss makes a unit uninhabitable.</span></li>
+            <li><span class="cov-name">Premises Liability</span><span class="cov-desc">Tenant or visitor injury on the property — the most common landlord claim by volume.</span></li>
+            <li><span class="cov-name">Umbrella / Excess</span><span class="cov-desc">Critical once you hold more than one property — liability exposure compounds across the whole portfolio.</span></li>
+            <li><span class="cov-name">Flood</span><span class="cov-desc">Property-level flood coverage for every unit in a flood zone, tracked per address.</span></li>
+            <li><span class="cov-name">Vacant Property / Reno Risk</span><span class="cov-desc">Gap coverage for flips or units between tenants, when a standard landlord policy stops applying.</span></li>
+          </ul>
+        </div>
+        <div class="pkg-extra">
+          <span class="pkg-label">Add When It Applies</span>
+          <ul class="addon-list">
+            <li>Equipment Breakdown — HVAC, appliances, and mechanical systems in multi-family units</li>
+            <li>Business Personal Property — furnished units and short-term rental furnishings/electronics</li>
+            <li>Ordinance or Law Coverage — code-upgrade costs on older properties after a covered loss</li>
+            <li>Employment Practices Liability — once you employ property managers or maintenance staff</li>
+            <li>Cyber Liability — tenant application data and short-term rental platform payment info</li>
+          </ul>
+          <p class="pkg-note">Built around the two things that actually hurt a landlord: a liability claim that outruns a single-property limit, and lost rent while a unit sits unrentable.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALL-IN -->
+    <div class="pkg-card fade" style="border-color: var(--accent);">
+      <div class="pkg-head" style="background: var(--accent);">
+        <div><span class="pkg-tag" style="color: rgba(255,255,255,.65);">ICP · 04 · The Flagship</span><h3 class="pkg-name">The All-In ICP</h3></div>
+        <div class="pkg-for" style="color: rgba(255,255,255,.75);">For people who build, develop, and hold rentals at the same time</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-core">
+          <span class="pkg-label">What's Bundled</span>
+          <ul class="cov-list">
+            <li><span class="cov-name">Every Core Coverage</span><span class="cov-desc">All Builder, Developer, and Investor core coverages that apply to your actual business, combined under one file.</span></li>
+            <li><span class="cov-name">One Renewal Calendar</span><span class="cov-desc">Every policy aligned to a single review cycle instead of six different renewal dates from six different carriers.</span></li>
+            <li><span class="cov-name">One Point of Contact</span><span class="cov-desc">Me. For every claim, every certificate request, every new project that needs a quote fast.</span></li>
+            <li><span class="cov-name">Priority Claims Handling</span><span class="cov-desc">Direct claims guidance across every policy in the package — you're never bounced between carriers.</span></li>
+          </ul>
+        </div>
+        <div class="pkg-extra">
+          <span class="pkg-label">Why It Exists</span>
+          <p class="pkg-desc" style="font-size:13px; color:var(--muted); line-height:1.85; margin-bottom:16px;">Most people in this business don't fit neatly into one box — a builder who also holds a rental or two, a developer who general-contracts their own projects. The All-In ICP is the actual HOA-style promise: <strong style="color:var(--text); font-weight:600;">you stop managing insurance entirely.</strong> One conversation a year, one advisor accountable for the whole portfolio, and every gap between "builder," "developer," and "investor" coverage — the exact seams where people usually get burned — closed on purpose instead of by accident.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section id="quote">
+  <div class="quote-inner">
+    <blockquote class="fade">"You shouldn't need five agents to protect one business. An ICP is the whole thing, built once, reviewed once a year."</blockquote>
+    <cite class="fade">— Shauna Swain &nbsp;·&nbsp; Just Insurance, Houston TX</cite>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-content">
+    <span class="cta-eyebrow fade">Let's Build Your ICP</span>
+    <h2 class="cta-h2 fade">Tell me what you build. I'll build the package.</h2>
+    <p class="cta-sub fade">Free consultation. I'll tell you which ICP fits — Builder, Developer, Investor, or All-In — before you commit to anything.</p>
+    <a href="tel:5026127011" class="cta-phone fade">(502) 612-7011</a>
+    <div class="cta-btns fade">
+      <a href="tel:5026127011" class="btn-white">Call or Text Now</a>
+      <a href="mailto:shauna.swain96@gmail.com" class="btn-outline-white">Send an Email</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="f-brand">Just Insurance</div>
+    <div class="f-center"><p>Licensed Independent Insurance Advisor<br>Houston, TX &nbsp;·&nbsp; © 2026 Just Insurance</p></div>
+    <div class="f-right"><a href="tel:5026127011">(502) 612-7011</a></div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(e => {
+  e.forEach(el => { if (el.isIntersecting) { el.target.classList.add('in'); io.unobserve(el.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
