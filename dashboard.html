@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advisor Dashboard | Just Insurance</title>
+  <meta name="description" content="Internal operations dashboard for Just Insurance — everything that needs attention, client history, documents, and brand, in one place." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white:   #FFFFFF;
+      --cream:   #F5F2EE;
+      --light:   #EEECE8;
+      --text:    #1A1917;
+      --muted:   #6B6860;
+      --border:  #DDD9D3;
+      --good:    #3F6B4E;
+      --warn:    #A9752B;
+      --bad:     #A5372F;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--text); font-family: 'Lato', sans-serif; font-weight: 300; line-height: 1.6; }
+
+    /* NAV (matches site) */
+    #nav {
+      position: sticky; top: 0; left: 0; right: 0; z-index: 300;
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: 0 52px; height: 70px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 16px;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta a {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text); text-decoration: none;
+      border: 1.5px solid var(--text); padding: 10px 24px;
+      transition: background .25s, color .25s;
+    }
+    .nav-cta a:hover { background: var(--text); color: var(--white); }
+
+    /* DASH HEADER */
+    #dash-head { background: var(--white); border-bottom: 1px solid var(--border); padding: 36px 52px 0; }
+    .dash-head-inner { max-width: 1240px; margin: 0 auto; }
+    .dash-eyebrow {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 4px; text-transform: uppercase; color: var(--muted);
+      display: block; margin-bottom: 10px;
+    }
+    .dash-title-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 26px; }
+    .dash-h1 {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: clamp(26px, 3vw, 38px);
+      text-transform: uppercase; letter-spacing: 1px; color: var(--text);
+    }
+    .dash-date { font-size: 12px; color: var(--muted); font-family: 'Raleway', sans-serif; letter-spacing: 1px; }
+
+    /* TABS */
+    .dash-tabs { display: flex; gap: 4px; overflow-x: auto; }
+    .dash-tab {
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--muted); background: none; border: none;
+      padding: 14px 18px; cursor: pointer; white-space: nowrap;
+      border-bottom: 2px solid transparent; transition: color .2s, border-color .2s;
+    }
+    .dash-tab:hover { color: var(--text); }
+    .dash-tab.active { color: var(--text); border-bottom-color: var(--text); }
+
+    /* CONTENT */
+    #dash-body { padding: 44px 52px 100px; }
+    .dash-wrap { max-width: 1240px; margin: 0 auto; }
+    .dash-panel { display: none; }
+    .dash-panel.active { display: block; }
+
+    .panel-lede { margin-bottom: 32px; }
+    .panel-lede h2 {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: clamp(20px, 2.4vw, 28px);
+      text-transform: uppercase; letter-spacing: 1px; color: var(--text); margin-bottom: 6px;
+    }
+    .panel-lede p { font-size: 13px; color: var(--muted); }
+
+    /* GRID / CARD */
+    .grid { display: grid; gap: 20px; }
+    .g2 { grid-template-columns: 1.1fr 1fr; }
+    .g3 { grid-template-columns: repeat(3, 1fr); }
+    .g4 { grid-template-columns: repeat(4, 1fr); }
+    .card {
+      background: var(--white); border: 1px solid var(--border); padding: 26px;
+    }
+    .card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .card-title {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 13px;
+      letter-spacing: 1.5px; text-transform: uppercase; color: var(--text);
+    }
+    .card-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .card-link {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--text); text-decoration: none;
+      border-bottom: 1.5px solid var(--text); padding-bottom: 2px; background: none; border-top: none; border-left: none; border-right: none;
+      cursor: pointer;
+    }
+
+    /* STAT TILES */
+    .stat-tile { background: var(--white); border: 1px solid var(--border); padding: 22px 24px; }
+    .stat-tile-label {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: block;
+    }
+    .stat-tile-val { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 30px; color: var(--text); letter-spacing: -.5px; }
+    .stat-tile-delta { font-size: 11px; margin-top: 8px; font-family: 'Raleway', sans-serif; letter-spacing: .5px; }
+    .up { color: var(--good); }
+    .down { color: var(--bad); }
+    .flat { color: var(--muted); }
+
+    /* FOCUS LIST */
+    .focus-list { list-style: none; }
+    .focus-list li {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 13px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text);
+    }
+    .focus-list li:last-child { border-bottom: none; }
+    .focus-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px;
+      background: var(--light); font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700; color: var(--text);
+      margin-right: 10px;
+    }
+    .focus-count.hot { background: var(--bad); color: var(--white); }
+    .focus-arrow { color: var(--muted); font-size: 13px; }
+
+    /* TABLE */
+    table.dtable { width: 100%; border-collapse: collapse; font-size: 13px; }
+    table.dtable th {
+      text-align: left; font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);
+      padding: 0 10px 10px; border-bottom: 1.5px solid var(--text);
+    }
+    table.dtable td { padding: 13px 10px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+    table.dtable tbody tr:hover { background: var(--cream); }
+    table.dtable tbody tr.extra-row { display: none; }
+    table.dtable tbody tr.extra-row.shown { display: table-row; }
+    .row-sub { color: var(--muted); font-size: 11px; }
+
+    .badge {
+      display: inline-block; font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border: 1px solid currentColor;
+    }
+    .badge.ok { color: var(--good); }
+    .badge.warn { color: var(--warn); }
+    .badge.bad { color: var(--bad); }
+    .badge.muted { color: var(--muted); }
+
+    .prio { font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .prio.high { color: var(--bad); }
+    .prio.medium { color: var(--warn); }
+    .prio.low { color: var(--muted); }
+
+    .row-action {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--text);
+    }
+
+    .expand-toggle {
+      margin-top: 16px; width: 100%; text-align: center; padding: 11px;
+      background: var(--cream); border: 1px solid var(--border); cursor: pointer;
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--text); transition: background .2s;
+    }
+    .expand-toggle:hover { background: var(--light); }
+
+    /* QUICK LINK CARDS (overview -> other categories) */
+    .quick-card {
+      background: var(--white); border: 1px solid var(--border); padding: 22px;
+      display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: border-color .2s, background .2s;
+    }
+    .quick-card:hover { border-color: var(--text); background: var(--cream); }
+    .quick-num {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 2px; color: var(--border);
+    }
+    .quick-name {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 14px; text-transform: uppercase;
+      letter-spacing: .5px; color: var(--text);
+    }
+    .quick-desc { font-size: 12px; color: var(--muted); line-height: 1.7; }
+    .quick-meta { font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text); margin-top: auto; }
+
+    /* DONUT */
+    .donut-wrap { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+    .donut {
+      width: 130px; height: 130px; border-radius: 50%; flex-shrink: 0;
+      background: conic-gradient(var(--good) 0% 79%, var(--warn) 79% 93%, var(--bad) 93% 100%);
+      display: flex; align-items: center; justify-content: center; position: relative;
+    }
+    .donut::after {
+      content: ''; position: absolute; width: 82px; height: 82px; border-radius: 50%; background: var(--white);
+    }
+    .donut-center { position: relative; z-index: 1; text-align: center; }
+    .donut-center b { font-family: 'Raleway', sans-serif; font-size: 22px; font-weight: 800; display: block; }
+    .donut-center span { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+    .legend { list-style: none; font-size: 12px; }
+    .legend li { display: flex; align-items: center; gap: 9px; padding: 6px 0; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .dot.good { background: var(--good); } .dot.warn { background: var(--warn); } .dot.bad { background: var(--bad); }
+
+    /* BARS */
+    .bar-row { display: grid; grid-template-columns: 90px 1fr 34px; align-items: center; gap: 12px; padding: 8px 0; font-size: 12px; }
+    .bar-track { height: 8px; background: var(--light); position: relative; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--text); }
+
+    /* MINI LINE CHART */
+    .chart-wrap { padding-top: 6px; }
+    .chart-legend { display: flex; gap: 20px; margin-top: 14px; font-size: 11px; color: var(--muted); }
+    .chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .chart-legend .sw { width: 14px; height: 2px; background: var(--text); display: inline-block; }
+    .chart-legend .sw.goal { background: var(--border); }
+
+    /* DOCS FILTER */
+    .filter-row { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-btn {
+      font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 9px 16px; border: 1px solid var(--border); background: var(--white);
+      color: var(--muted); cursor: pointer; transition: all .2s;
+    }
+    .filter-btn:hover { border-color: var(--text); color: var(--text); }
+    .filter-btn.active { background: var(--text); border-color: var(--text); color: var(--white); }
+
+    /* SEARCH */
+    .search-input {
+      width: 100%; padding: 13px 16px; border: 1px solid var(--border); background: var(--white);
+      font-family: 'Lato', sans-serif; font-size: 13px; color: var(--text); font-weight: 300;
+    }
+    .search-input:focus { outline: none; border-color: var(--text); }
+    .search-row { margin-bottom: 22px; }
+
+    /* CLIENT HISTORY DETAIL */
+    .hist-list { list-style: none; }
+    .hist-row {
+      display: grid; grid-template-columns: 1fr 110px 100px 40px; align-items: center; gap: 10px;
+      padding: 14px 10px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .15s;
+    }
+    .hist-row:hover, .hist-row.selected { background: var(--cream); }
+    .hist-client { font-size: 13px; color: var(--text); font-weight: 400; }
+    .hist-sub { font-size: 11px; color: var(--muted); }
+    .hist-date { font-size: 11px; color: var(--muted); }
+    .hist-arrow { color: var(--muted); text-align: right; }
+    .detail-empty { color: var(--muted); font-size: 13px; padding: 40px 0; text-align: center; }
+    .detail-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .detail-title { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 17px; text-transform: uppercase; letter-spacing: .5px; }
+    .detail-client { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .detail-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; padding: 18px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .detail-meta-label { font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .detail-meta-val { font-size: 13px; color: var(--text); }
+    .detail-docs { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
+    .doc-chip { border: 1px solid var(--border); padding: 10px 14px; font-size: 11px; color: var(--text); font-family: 'Raleway', sans-serif; letter-spacing: .5px; }
+    .detail-note { font-size: 12px; color: var(--muted); line-height: 1.8; border-left: 2px solid var(--border); padding-left: 14px; }
+
+    /* REVIEW AGENT */
+    .shipped-item, .slipped-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+    .shipped-item:last-child, .slipped-item:last-child { border-bottom: none; }
+    .mark { flex-shrink: 0; font-size: 13px; margin-top: 1px; }
+    .mark.ok { color: var(--good); }
+    .mark.warn { color: var(--warn); }
+    .item-sub { color: var(--muted); font-size: 11px; margin-top: 2px; }
+    .agent-note { display: flex; align-items: center; gap: 12px; }
+    .agent-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--good); flex-shrink: 0; }
+
+    /* BRAND KIT */
+    .swatch-row { display: flex; gap: 14px; flex-wrap: wrap; }
+    .swatch { width: 108px; }
+    .swatch-color { height: 74px; border: 1px solid var(--border); margin-bottom: 8px; }
+    .swatch-name { font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+    .swatch-hex { font-size: 10px; color: var(--muted); font-family: 'Lato', monospace; }
+    .type-sample-h { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 26px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .type-sample-b { font-size: 14px; color: var(--muted); font-weight: 300; }
+    .type-label { font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .voice-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+    .voice-tag { border: 1px solid var(--text); padding: 8px 16px; font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .mini-preview { border: 1px solid var(--border); }
+    .mini-preview-head { background: var(--text); color: var(--white); padding: 10px 14px; font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+    .mini-preview-body { padding: 18px; font-size: 12px; color: var(--muted); min-height: 70px; }
+    .mini-preview-body strong { display: block; color: var(--text); font-family: 'Raleway', sans-serif; font-size: 13px; margin-bottom: 6px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .g2, .g3, .g4 { grid-template-columns: 1fr 1fr; }
+      #dash-head, #dash-body { padding-left: 24px; padding-right: 24px; }
+      .nav-links { display: none; }
+      .hist-row { grid-template-columns: 1fr 90px 30px; }
+      .hist-date { display: none; }
+      .detail-meta { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      #nav { padding: 0 20px; }
+      .g2, .g3, .g4 { grid-template-columns: 1fr; }
+      .dash-title-row { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-brand">Just Insurance</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Site</a></li>
+    <li><a href="index.html#cta">Contact</a></li>
+  </ul>
+  <div class="nav-cta"><a href="tel:5026127011">Call Now</a></div>
+</nav>
+
+<!-- DASH HEADER -->
+<header id="dash-head">
+  <div class="dash-head-inner">
+    <span class="dash-eyebrow">Internal · Advisor Dashboard</span>
+    <div class="dash-title-row">
+      <h1 class="dash-h1" id="dash-h1">What to Act On</h1>
+      <span class="dash-date" id="today-date"></span>
+    </div>
+    <div class="dash-tabs" role="tablist">
+      <button class="dash-tab active" data-tab="overview">Overview</button>
+      <button class="dash-tab" data-tab="operations">Operations</button>
+      <button class="dash-tab" data-tab="history">Client History</button>
+      <button class="dash-tab" data-tab="review">Review Agent</button>
+      <button class="dash-tab" data-tab="documents">Documents</button>
+      <button class="dash-tab" data-tab="brand">Brand Kit</button>
+    </div>
+  </div>
+</header>
+
+<!-- BODY -->
+<main id="dash-body">
+  <div class="dash-wrap">
+
+    <!-- ================= OVERVIEW / WHAT TO ACT ON ================= -->
+    <section class="dash-panel active" data-panel="overview">
+      <div class="panel-lede">
+        <h2>Everything That Needs Your Attention</h2>
+        <p>One page. Every category below, at a glance — expand for the full list or jump straight into a category.</p>
+      </div>
+
+      <div class="grid g2" style="margin-bottom:20px;">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Focus Now</div>
+              <div class="card-sub">7 items need action this week</div>
+            </div>
+          </div>
+          <ul class="focus-list">
+            <li><span><span class="focus-count hot">3</span>Renewals are overdue</span><span class="focus-arrow">→</span></li>
+            <li><span><span class="focus-count">4</span>Policies due this week</span><span class="focus-arrow">→</span></li>
+            <li><span><span class="focus-count">2</span>Quotes awaiting client signature</span><span class="focus-arrow">→</span></li>
+            <li><span><span class="focus-count">3</span>Invoices unpaid</span><span class="focus-arrow">→</span></li>
+          </ul>
+        </div>
+
+        <div class="grid g2" style="gap:16px;">
+          <div class="stat-tile">
+            <span class="stat-tile-label">Active Policies</span>
+            <div class="stat-tile-val">86</div>
+            <div class="stat-tile-delta flat">5 up for renewal</div>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-label">Renewals This Week</span>
+            <div class="stat-tile-val">7</div>
+            <div class="stat-tile-delta down">2 overdue</div>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-label">New Leads</span>
+            <div class="stat-tile-val">14</div>
+            <div class="stat-tile-delta up">↑ 12.4% vs last 7 days</div>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-label">Premium (MTD)</span>
+            <div class="stat-tile-val">$128.4k</div>
+            <div class="stat-tile-delta up">↑ 9.2% vs Aug 13 – Sep 10</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:32px;">
+        <div class="card-head">
+          <div class="card-title">Items That Need Your Attention</div>
+        </div>
+        <table class="dtable">
+          <thead>
+            <tr><th>Item</th><th>Client</th><th>Due</th><th>Status</th><th>Priority</th><th></th></tr>
+          </thead>
+          <tbody id="attn-table">
+            <tr>
+              <td>Commercial Auto Renewal<div class="row-sub">Renewal</div></td>
+              <td>Chen Auto Group</td><td>Sep 18, 2026</td>
+              <td><span class="badge bad">Overdue</span></td><td><span class="prio high">High</span></td>
+              <td><a href="#" class="row-action">Review</a></td>
+            </tr>
+            <tr>
+              <td>Workers Comp Quote<div class="row-sub">Quote</div></td>
+              <td>Whitfield &amp; Co.</td><td>Sep 20, 2026</td>
+              <td><span class="badge warn">Due Soon</span></td><td><span class="prio high">High</span></td>
+              <td><a href="#" class="row-action">Open</a></td>
+            </tr>
+            <tr>
+              <td>Builders Risk Signature<div class="row-sub">Signature</div></td>
+              <td>Summit Custom Homes</td><td>Waiting</td>
+              <td><span class="badge muted">Waiting</span></td><td><span class="prio medium">Medium</span></td>
+              <td><a href="#" class="row-action">Follow Up</a></td>
+            </tr>
+            <tr>
+              <td>Home &amp; Flood Invoice<div class="row-sub">Invoice</div></td>
+              <td>Patel Residence</td><td>Sep 5, 2026</td>
+              <td><span class="badge bad">Overdue</span></td><td><span class="prio high">High</span></td>
+              <td><a href="#" class="row-action">View</a></td>
+            </tr>
+            <tr class="extra-row">
+              <td>Life &amp; Umbrella Renewal<div class="row-sub">Renewal</div></td>
+              <td>Nguyen Family</td><td>Sep 30, 2026</td>
+              <td><span class="badge muted">Upcoming</span></td><td><span class="prio low">Low</span></td>
+              <td><a href="#" class="row-action">Review</a></td>
+            </tr>
+            <tr class="extra-row">
+              <td>Home Claim Follow-Up<div class="row-sub">Claim</div></td>
+              <td>Ramirez Family</td><td>Sep 15, 2026</td>
+              <td><span class="badge warn">Due Soon</span></td><td><span class="prio medium">Medium</span></td>
+              <td><a href="#" class="row-action">Open</a></td>
+            </tr>
+            <tr class="extra-row">
+              <td>BOP Add-On Quote<div class="row-sub">Quote</div></td>
+              <td>Bayou City Realty</td><td>Sep 22, 2026</td>
+              <td><span class="badge muted">Upcoming</span></td><td><span class="prio low">Low</span></td>
+              <td><a href="#" class="row-action">Open</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="expand-toggle" data-expand="attn-table">View All (7)</button>
+      </div>
+
+      <div class="panel-lede" style="margin-bottom:20px;">
+        <h2 style="font-size:16px;">Jump Into a Category</h2>
+      </div>
+      <div class="grid g3">
+        <div class="quick-card" data-goto="operations">
+          <span class="quick-num">01</span>
+          <span class="quick-name">Operations</span>
+          <span class="quick-desc">Premium, policies, tasks, and top clients — the business at a glance.</span>
+          <span class="quick-meta">View Dashboard →</span>
+        </div>
+        <div class="quick-card" data-goto="history">
+          <span class="quick-num">02</span>
+          <span class="quick-name">Client History</span>
+          <span class="quick-desc">Searchable history of every client and policy, with full detail.</span>
+          <span class="quick-meta">Search History →</span>
+        </div>
+        <div class="quick-card" data-goto="review">
+          <span class="quick-num">03</span>
+          <span class="quick-name">Review Agent</span>
+          <span class="quick-desc">Checks each night what shipped and what slipped so nothing falls through.</span>
+          <span class="quick-meta">View Last Run →</span>
+        </div>
+        <div class="quick-card" data-goto="documents">
+          <span class="quick-num">04</span>
+          <span class="quick-name">Documents</span>
+          <span class="quick-desc">Every contract, SOP, and client file — searchable in one place.</span>
+          <span class="quick-meta">Search Documents →</span>
+        </div>
+        <div class="quick-card" data-goto="brand">
+          <span class="quick-num">05</span>
+          <span class="quick-name">Brand Kit</span>
+          <span class="quick-desc">Colors, type, voice &amp; tone — use the brand consistently everywhere.</span>
+          <span class="quick-meta">View Brand Kit →</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= OPERATIONS ================= -->
+    <section class="dash-panel" data-panel="operations">
+      <div class="panel-lede">
+        <h2>Operations Dashboard</h2>
+        <p>Your business at a glance. See what matters and take action.</p>
+      </div>
+
+      <div class="grid g4" style="margin-bottom:20px;">
+        <div class="stat-tile"><span class="stat-tile-label">Premium (MTD)</span><div class="stat-tile-val">$128.4k</div><div class="stat-tile-delta up">↑ 9.2% vs Apr 13 – May 12</div></div>
+        <div class="stat-tile"><span class="stat-tile-label">Active Policies</span><div class="stat-tile-val">86</div><div class="stat-tile-delta flat">5 up for renewal</div></div>
+        <div class="stat-tile"><span class="stat-tile-label">Tasks To Do</span><div class="stat-tile-val">22</div><div class="stat-tile-delta down">6 overdue</div></div>
+        <div class="stat-tile"><span class="stat-tile-label">New Leads</span><div class="stat-tile-val">14</div><div class="stat-tile-delta up">↑ 12.4% vs last 7 days</div></div>
+      </div>
+
+      <div class="grid g2" style="margin-bottom:20px;">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Policies Overview</div></div>
+          <div class="donut-wrap">
+            <div class="donut"><div class="donut-center"><b>86</b><span>Total</span></div></div>
+            <ul class="legend">
+              <li><span class="dot good"></span>Active — 68 (79%)</li>
+              <li><span class="dot warn"></span>Renewal Due — 12 (14%)</li>
+              <li><span class="dot bad"></span>At Risk — 6 (7%)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Tasks by Status</div></div>
+          <div class="bar-row"><span>To Do</span><div class="bar-track"><div class="bar-fill" style="width:26%"></div></div><span>22</span></div>
+          <div class="bar-row"><span>In Progress</span><div class="bar-track"><div class="bar-fill" style="width:18%"></div></div><span>15</span></div>
+          <div class="bar-row"><span>Review</span><div class="bar-track"><div class="bar-fill" style="width:7%"></div></div><span>6</span></div>
+          <div class="bar-row"><span>Done</span><div class="bar-track"><div class="bar-fill" style="width:49%"></div></div><span>41</span></div>
+        </div>
+      </div>
+
+      <div class="grid g2" style="margin-bottom:20px;">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Premium Overview</div>
+              <div class="card-sub">This month vs. goal</div>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <svg viewBox="0 0 300 110" width="100%" height="110" preserveAspectRatio="none">
+              <polyline points="0,90 50,78 100,70 150,55 200,42 250,30 300,18" fill="none" stroke="#1A1917" stroke-width="2"/>
+              <polyline points="0,95 50,84 100,72 150,60 200,48 250,36 300,24" fill="none" stroke="#DDD9D3" stroke-width="2" stroke-dasharray="4 4"/>
+            </svg>
+          </div>
+          <div class="chart-legend">
+            <span><i class="sw"></i>Premium</span>
+            <span><i class="sw goal"></i>Goal</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Top Clients by Premium</div></div>
+          <ul class="focus-list">
+            <li><span>Thornton Builders</span><span>$18,400</span></li>
+            <li><span>Chen Auto Group</span><span>$14,200</span></li>
+            <li><span>Whitfield &amp; Co.</span><span>$11,900</span></li>
+            <li><span>Bayou City Realty</span><span>$9,600</span></li>
+            <li><span>Summit Custom Homes</span><span>$8,100</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="card-title">Recent Activity</div></div>
+        <ul class="focus-list">
+          <li><span>Commercial Auto Renewal completed — Chen Auto Group</span><span class="row-sub">2h ago</span></li>
+          <li><span>New quote sent to Whitfield &amp; Co. — $11,900</span><span class="row-sub">4h ago</span></li>
+          <li><span>Kickoff call scheduled — Summit Custom Homes</span><span class="row-sub">1d ago</span></li>
+          <li><span>Invoice #INV-2024 paid — Patel Residence</span><span class="row-sub">2d ago</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= CLIENT HISTORY ================= -->
+    <section class="dash-panel" data-panel="history">
+      <div class="panel-lede">
+        <h2>Client History</h2>
+        <p>Searchable history of every client and policy.</p>
+      </div>
+      <div class="search-row">
+        <input type="text" class="search-input" id="hist-search" placeholder="Search client name, policy, or keyword…" />
+      </div>
+      <div class="grid g2">
+        <div class="card" style="padding:8px 26px;">
+          <ul class="hist-list" id="hist-list">
+            <li class="hist-row" data-client="ramirez">
+              <div><div class="hist-client">Ramirez Family</div><div class="hist-sub">Home &amp; Auto Bundle</div></div>
+              <div class="hist-date">Mar 1 – Ongoing</div><div><span class="badge ok">Active</span></div><div class="hist-arrow">›</div>
+            </li>
+            <li class="hist-row" data-client="thornton">
+              <div><div class="hist-client">Thornton Builders</div><div class="hist-sub">Builders Risk &amp; GL</div></div>
+              <div class="hist-date">Jan 15 – Dec 15</div><div><span class="badge ok">Active</span></div><div class="hist-arrow">›</div>
+            </li>
+            <li class="hist-row" data-client="bayou">
+              <div><div class="hist-client">Bayou City Realty</div><div class="hist-sub">Business Owners Policy</div></div>
+              <div class="hist-date">Feb 1 – Ongoing</div><div><span class="badge ok">Active</span></div><div class="hist-arrow">›</div>
+            </li>
+            <li class="hist-row" data-client="chen">
+              <div><div class="hist-client">Chen Auto Group</div><div class="hist-sub">Commercial Auto Fleet</div></div>
+              <div class="hist-date">Apr 10 – Ongoing</div><div><span class="badge warn">Renewal Due</span></div><div class="hist-arrow">›</div>
+            </li>
+            <li class="hist-row" data-client="patel">
+              <div><div class="hist-client">Patel Residence</div><div class="hist-sub">Home &amp; Flood</div></div>
+              <div class="hist-date">May 5 – Ongoing</div><div><span class="badge ok">Active</span></div><div class="hist-arrow">›</div>
+            </li>
+            <li class="hist-row" data-client="whitfield">
+              <div><div class="hist-client">Whitfield &amp; Co.</div><div class="hist-sub">Workers Comp</div></div>
+              <div class="hist-date">Dec 1 – Nov 30</div><div><span class="badge ok">Active</span></div><div class="hist-arrow">›</div>
+            </li>
+            <li class="hist-row" data-client="nguyen">
+              <div><div class="hist-client">Nguyen Family</div><div class="hist-sub">Life &amp; Umbrella</div></div>
+              <div class="hist-date">Jun 12 – Ongoing</div><div><span class="badge ok">Active</span></div><div class="hist-arrow">›</div>
+            </li>
+            <li class="hist-row" data-client="summit">
+              <div><div class="hist-client">Summit Custom Homes</div><div class="hist-sub">Builders Risk</div></div>
+              <div class="hist-date">Jul 1 – Jun 30</div><div><span class="badge muted">Pending</span></div><div class="hist-arrow">›</div>
+            </li>
+          </ul>
+        </div>
+        <div class="card" id="hist-detail">
+          <div class="detail-empty">Select a client to view their policy history.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= REVIEW AGENT ================= -->
+    <section class="dash-panel" data-panel="review">
+      <div class="panel-lede">
+        <h2>Review Agent</h2>
+        <p>Checks each night what shipped and what slipped.</p>
+      </div>
+
+      <div class="grid g3" style="margin-bottom:20px;">
+        <div class="stat-tile"><span class="stat-tile-label">Shipped</span><div class="stat-tile-val up">19</div></div>
+        <div class="stat-tile"><span class="stat-tile-label">Slipped</span><div class="stat-tile-val" style="color:var(--warn)">4</div></div>
+        <div class="stat-tile"><span class="stat-tile-label">Total Items</span><div class="stat-tile-val">23</div></div>
+      </div>
+
+      <div class="grid g2" style="margin-bottom:20px;">
+        <div class="card">
+          <div class="card-head"><div class="card-title">What Shipped</div><span class="card-sub">Completed on time</span></div>
+          <div class="shipped-item"><span class="mark ok">✓</span><div><div>Commercial Auto renewal sent</div><div class="item-sub">Chen Auto Group</div></div></div>
+          <div class="shipped-item"><span class="mark ok">✓</span><div><div>COI issued</div><div class="item-sub">Ramirez Family</div></div></div>
+          <div class="shipped-item"><span class="mark ok">✓</span><div><div>COI updated</div><div class="item-sub">Thornton Builders</div></div></div>
+          <div class="shipped-item"><span class="mark ok">✓</span><div><div>Annual policy review completed</div><div class="item-sub">Nguyen Family</div></div></div>
+          <div class="shipped-item"><span class="mark ok">✓</span><div><div>BOP endorsement filed</div><div class="item-sub">Bayou City Realty</div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">What Slipped</div><span class="card-sub">Not completed on time</span></div>
+          <div class="slipped-item"><span class="mark warn">!</span><div><div>Workers Comp quote</div><div class="item-sub">Whitfield &amp; Co. — new due Sep 20</div></div></div>
+          <div class="slipped-item"><span class="mark warn">!</span><div><div>Signature reminder</div><div class="item-sub">Summit Custom Homes — new due Sep 21</div></div></div>
+          <div class="slipped-item"><span class="mark warn">!</span><div><div>Invoice follow-up</div><div class="item-sub">Patel Residence — new due Sep 12</div></div></div>
+          <div class="slipped-item"><span class="mark warn">!</span><div><div>Claim callback</div><div class="item-sub">Ramirez Family — new due Sep 16</div></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="card-title">Agent Activity</div></div>
+        <div class="agent-note"><span class="agent-dot"></span><span>Agent runs nightly at 2:00 AM. Last run Sep 11, 2026 at 2:07 AM — <strong>Completed</strong>.</span></div>
+      </div>
+    </section>
+
+    <!-- ================= DOCUMENTS ================= -->
+    <section class="dash-panel" data-panel="documents">
+      <div class="panel-lede">
+        <h2>Company Brain</h2>
+        <p>Every contract, SOP, and client file in one place.</p>
+      </div>
+      <div class="search-row">
+        <input type="text" class="search-input" id="doc-search" placeholder="Ask or search anything…" />
+      </div>
+      <div class="grid g3" style="margin-bottom:24px;">
+        <div class="stat-tile"><span class="stat-tile-label">Contracts</span><div class="stat-tile-val">34</div></div>
+        <div class="stat-tile"><span class="stat-tile-label">SOPs</span><div class="stat-tile-val">12</div></div>
+        <div class="stat-tile"><span class="stat-tile-label">Client Files</span><div class="stat-tile-val">86</div></div>
+      </div>
+      <div class="filter-row">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="Contract">Contracts</button>
+        <button class="filter-btn" data-filter="SOP">SOPs</button>
+        <button class="filter-btn" data-filter="Client File">Client Files</button>
+      </div>
+      <div class="card">
+        <table class="dtable">
+          <thead><tr><th>Name</th><th>Type</th><th>Client</th><th>Updated</th></tr></thead>
+          <tbody id="doc-table">
+            <tr data-type="Contract" data-name="thornton builders master service agreement">
+              <td>Thornton Builders – Master Service Agreement.pdf</td><td><span class="badge muted">Contract</span></td><td>Thornton Builders</td><td>2 hours ago</td>
+            </tr>
+            <tr data-type="SOP" data-name="new client onboarding sop">
+              <td>New Client Onboarding SOP.pdf</td><td><span class="badge muted">SOP</span></td><td>Internal</td><td>5 hours ago</td>
+            </tr>
+            <tr data-type="Client File" data-name="chen auto group fleet schedule">
+              <td>Chen Auto Group – Fleet Schedule.pdf</td><td><span class="badge muted">Client File</span></td><td>Chen Auto Group</td><td>1 day ago</td>
+            </tr>
+            <tr data-type="SOP" data-name="renewal process sop">
+              <td>Renewal Process SOP.pdf</td><td><span class="badge muted">SOP</span></td><td>Internal</td><td>2 days ago</td>
+            </tr>
+            <tr data-type="Contract" data-name="whitfield co coi request">
+              <td>Whitfield &amp; Co. – COI Request.pdf</td><td><span class="badge muted">Contract</span></td><td>Whitfield &amp; Co.</td><td>3 days ago</td>
+            </tr>
+            <tr data-type="Client File" data-name="bayou city realty bop policy">
+              <td>Bayou City Realty – BOP Policy.pdf</td><td><span class="badge muted">Client File</span></td><td>Bayou City Realty</td><td>4 days ago</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= BRAND KIT ================= -->
+    <section class="dash-panel" data-panel="brand">
+      <div class="panel-lede">
+        <h2>Brand Kit</h2>
+        <p>Your brand elements in one place. Use them to stay on-brand everywhere.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-head"><div class="card-title">Colors</div></div>
+        <div class="swatch-row">
+          <div class="swatch"><div class="swatch-color" style="background:#FFFFFF"></div><div class="swatch-name">White</div><div class="swatch-hex">#FFFFFF</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#F5F2EE"></div><div class="swatch-name">Cream</div><div class="swatch-hex">#F5F2EE</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#EEECE8"></div><div class="swatch-name">Light</div><div class="swatch-hex">#EEECE8</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#1A1917"></div><div class="swatch-name">Text</div><div class="swatch-hex">#1A1917</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#6B6860"></div><div class="swatch-name">Muted</div><div class="swatch-hex">#6B6860</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#DDD9D3"></div><div class="swatch-name">Border</div><div class="swatch-hex">#DDD9D3</div></div>
+        </div>
+      </div>
+
+      <div class="grid g2" style="margin-bottom:20px;">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Typography</div></div>
+          <div class="type-label">Headings — Raleway</div>
+          <div class="type-sample-h">Aa Raleway</div>
+          <div class="type-label" style="margin-top:18px;">Body — Lato</div>
+          <div class="type-sample-b">Aa Lato — the quick brown fox jumps over the lazy dog.</div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Voice &amp; Tone</div></div>
+          <div class="voice-tags">
+            <span class="voice-tag">Direct</span>
+            <span class="voice-tag">Warm</span>
+            <span class="voice-tag">Trustworthy</span>
+            <span class="voice-tag">No-Nonsense</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="card-title">Use Your Brand Everywhere</div></div>
+        <div class="grid g3">
+          <div class="mini-preview">
+            <div class="mini-preview-head">Social Post</div>
+            <div class="mini-preview-body"><strong>Just Insurance</strong>One advisor. Every policy. Handled the way it should be.</div>
+          </div>
+          <div class="mini-preview">
+            <div class="mini-preview-head">Email</div>
+            <div class="mini-preview-body"><strong>Hello from Just Insurance</strong>Thanks for trusting us with your coverage. Here's what's new.</div>
+          </div>
+          <div class="mini-preview">
+            <div class="mini-preview-head">Document</div>
+            <div class="mini-preview-body"><strong>Coverage Proposal</strong>Prepared for your review — May 15, 2026.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+  // Today date
+  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  // Tab switching
+  const tabs = document.querySelectorAll('.dash-tab');
+  const panels = document.querySelectorAll('.dash-panel');
+  const h1 = document.getElementById('dash-h1');
+  const titles = {
+    overview: 'What to Act On',
+    operations: 'Operations Dashboard',
+    history: 'Client History',
+    review: 'Review Agent',
+    documents: 'Company Brain',
+    brand: 'Brand Kit',
+  };
+  function showTab(name) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+    panels.forEach(p => p.classList.toggle('active', p.dataset.panel === name));
+    h1.textContent = titles[name] || 'Dashboard';
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+  tabs.forEach(t => t.addEventListener('click', () => showTab(t.dataset.tab)));
+  document.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', () => showTab(el.dataset.goto));
+  });
+
+  // Expand / collapse tables
+  document.querySelectorAll('.expand-toggle').forEach(btn => {
+    btn.dataset.original = btn.textContent;
+    btn.addEventListener('click', () => {
+      const table = document.getElementById(btn.dataset.expand);
+      const expanded = btn.classList.toggle('is-open');
+      table.querySelectorAll('.extra-row').forEach(r => r.classList.toggle('shown', expanded));
+      btn.textContent = expanded ? 'Show Less' : btn.dataset.original;
+    });
+  });
+
+  // Client history search + detail
+  const histData = {
+    ramirez:  { name: 'Ramirez Family', policy: 'Home & Auto Bundle', dates: 'Mar 1, 2026 – Ongoing', status: 'Active', premium: '$4,200 / yr', carrier: 'Progressive', docs: ['Declarations', 'COI', 'Auto ID Cards', 'Renewal Notice'], note: 'Bundled home & auto for a 12% multi-policy discount. Reviewed coverage limits with client on Jun 3 — no changes requested.' },
+    thornton: { name: 'Thornton Builders', policy: 'Builders Risk & GL', dates: 'Jan 15 – Dec 15, 2026', status: 'Active', premium: '$18,400 / yr', carrier: 'Travelers', docs: ['Master Service Agreement', 'COI', 'GL Schedule', 'Builders Risk Policy'], note: 'Covers 3 active job sites. COI updated for new GC requirement on Sep 9.' },
+    bayou:    { name: 'Bayou City Realty', policy: 'Business Owners Policy', dates: 'Feb 1, 2026 – Ongoing', status: 'Active', premium: '$9,600 / yr', carrier: 'Hartford', docs: ['BOP Policy', 'Endorsement'], note: 'Added cyber liability endorsement in Jul after client request.' },
+    chen:     { name: 'Chen Auto Group', policy: 'Commercial Auto Fleet', dates: 'Apr 10, 2026 – Ongoing', status: 'Renewal Due', premium: '$14,200 / yr', carrier: 'Safeco', docs: ['Fleet Schedule', 'Prior Policy', 'Loss Runs'], note: 'Fleet grew from 6 to 9 vehicles this year — renewal quote reflects updated schedule. Due Sep 18.' },
+    patel:    { name: 'Patel Residence', policy: 'Home & Flood', dates: 'May 5, 2026 – Ongoing', status: 'Active', premium: '$3,100 / yr', carrier: 'NFIP + Safeco', docs: ['Home Policy', 'Flood Policy', 'Elevation Cert'], note: 'Flood zone AE — elevation certificate on file, kept premium down significantly.' },
+    whitfield:{ name: 'Whitfield & Co.', policy: 'Workers Comp', dates: 'Dec 1, 2025 – Nov 30, 2026', status: 'Active', premium: '$11,900 / yr', carrier: 'Texas Mutual', docs: ['Policy', 'Payroll Audit'], note: 'Annual payroll audit scheduled for Nov. New quote requested for added crew — due Sep 20.' },
+    nguyen:   { name: 'Nguyen Family', policy: 'Life & Umbrella', dates: 'Jun 12, 2026 – Ongoing', status: 'Active', premium: '$2,400 / yr', carrier: 'Lincoln Financial', docs: ['Life Policy', 'Umbrella Policy'], note: 'Umbrella added after home equity increase. Annual review scheduled for Sep 30.' },
+    summit:   { name: 'Summit Custom Homes', policy: 'Builders Risk', dates: 'Jul 1, 2026 – Jun 30, 2027', status: 'Pending Signature', premium: '$8,100 / yr', carrier: 'Travelers', docs: ['Builders Risk Quote', 'Application'], note: 'Quote sent Sep 3 — waiting on signed application to bind coverage.' },
+  };
+  const detailEl = document.getElementById('hist-detail');
+  document.querySelectorAll('.hist-row').forEach(row => {
+    row.addEventListener('click', () => {
+      document.querySelectorAll('.hist-row').forEach(r => r.classList.remove('selected'));
+      row.classList.add('selected');
+      const d = histData[row.dataset.client];
+      const badgeClass = d.status === 'Active' ? 'ok' : d.status === 'Renewal Due' ? 'warn' : 'muted';
+      detailEl.innerHTML = `
+        <div class="detail-head">
+          <div><div class="detail-title">${d.policy}</div><div class="detail-client">${d.name}</div></div>
+          <span class="badge ${badgeClass}">${d.status}</span>
+        </div>
+        <div class="detail-meta">
+          <div><div class="detail-meta-label">Policy Dates</div><div class="detail-meta-val">${d.dates}</div></div>
+          <div><div class="detail-meta-label">Carrier</div><div class="detail-meta-val">${d.carrier}</div></div>
+          <div><div class="detail-meta-label">Premium</div><div class="detail-meta-val">${d.premium}</div></div>
+          <div><div class="detail-meta-label">Documents</div><div class="detail-meta-val">${d.docs.length} files</div></div>
+        </div>
+        <div class="detail-meta-label" style="margin-bottom:10px;">Key Documents</div>
+        <div class="detail-docs">${d.docs.map(doc => `<span class="doc-chip">${doc}</span>`).join('')}</div>
+        <div class="detail-meta-label" style="margin:18px 0 10px;">Notes</div>
+        <div class="detail-note">${d.note}</div>
+      `;
+    });
+  });
+  document.getElementById('hist-search').addEventListener('input', e => {
+    const q = e.target.value.toLowerCase();
+    document.querySelectorAll('.hist-row').forEach(row => {
+      const match = row.textContent.toLowerCase().includes(q);
+      row.style.display = match ? '' : 'none';
+    });
+  });
+
+  // Documents filter + search
+  const docFilterBtns = document.querySelectorAll('.filter-btn');
+  const docRows = document.querySelectorAll('#doc-table tr');
+  function applyDocFilters() {
+    const activeType = document.querySelector('.filter-btn.active').dataset.filter;
+    const q = document.getElementById('doc-search').value.toLowerCase();
+    docRows.forEach(row => {
+      const typeMatch = activeType === 'all' || row.dataset.type === activeType;
+      const textMatch = row.dataset.name.includes(q);
+      row.style.display = (typeMatch && textMatch) ? '' : 'none';
+    });
+  }
+  docFilterBtns.forEach(btn => btn.addEventListener('click', () => {
+    docFilterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyDocFilters();
+  }));
+  document.getElementById('doc-search').addEventListener('input', applyDocFilters);
+</script>
+</body>
+</html>
